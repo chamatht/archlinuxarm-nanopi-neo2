@@ -1,7 +1,7 @@
 This repository can be used to create an ArchLinuxARM image for the NanoPi Neo2
 board.
 
-Modified to build a image suitable for f2fs, see F2FS-howto.md for instructions
+Modified to build a image suitable for f2fs.
 
 Dependencies
 ============
@@ -12,6 +12,7 @@ Dependencies
 - `uboot-tools`
 - `sudo`
 - `fdisk`
+- `f2fs-tools`
 
 
 Prerequisite
@@ -53,15 +54,11 @@ installation][alarm-allwinner].
 
 [alarm-allwinner]: https://archlinuxarm.org/platforms/armv7/allwinner/.
 
+
 Ethernet
 ========
 
-In order to get ethernet working, you will need a recent kernel (>= 4.13).  At
-the time I'm writing these lines, the latest stable is 4.12. Though, you can
-grab the [kernel RC package from ArchLinux ARM][linux-rc] and install it from
-the serial interface.
-
-[linux-rc]: https://archlinuxarm.org/packages/aarch64/linux-aarch64-rc
+In order to get ethernet working, you will need a recent kernel (>= 4.13).
 
 
 Goodies
