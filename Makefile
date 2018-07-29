@@ -64,14 +64,21 @@ ifeq ($(BLOCK_DEVICE),/dev/null)
 else
 	sudo dd if=/dev/zero of=$(BLOCK_DEVICE) bs=1M count=8
 	sudo fdisk $(BLOCK_DEVICE) < fdisk.cmd
-	sudo mkfs.f2fs $(call part1,$(BLOCK_DEVICE))
-	mkdir -p $(MOUNT_POINT)
-	sudo umount $(MOUNT_POINT) || true
-	sudo mount $(call part1,$(BLOCK_DEVICE)) $(MOUNT_POINT)
-	sudo bsdtar -xpf $(ARCH_TARBALL) -C $(MOUNT_POINT)
+	sudo mkfs.ext4 $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==3')
+	sudo mkfs.f2fs $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==4')
+	mkdir -p $(MOUNT_POINT)/root
+	mkdir -p $(MOUNT_POINT)/boot
+	sudo umount $(MOUNT_POINT)/root || true
+	sudo umount $(MOUNT_POINT)/boot || true
+	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==3') $(MOUNT_POINT)/boot
+	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==4') $(MOUNT_POINT)/root
+	sudo bsdtar -xpf $(ARCH_TARBALL) -C $(MOUNT_POINT)/root
 	sudo cp $(UBOOT_SCRIPT) $(MOUNT_POINT)/boot
 	sync
-	sudo umount $(MOUNT_POINT) || true
+	sudo umount $(MOUNT_POINT)/boot || true
+	sudo umount $(MOUNT_POINT)/root || true
+	rmdir $(MOUNT_POINT)/boot || true
+	rmdir $(MOUNT_POINT)/root || true
 	rmdir $(MOUNT_POINT) || true
 	sudo dd if=$(UBOOT_BIN) of=$(BLOCK_DEVICE) bs=1024 seek=8
 endif
