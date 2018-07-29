@@ -58,7 +58,7 @@ define part1
 /dev/$(shell basename $(shell $(FIND) /sys/block/$(shell basename $(1))/ -maxdepth 2 -name "partition" -printf "%h"))
 endef
 
-install: $(UBOOT_BIN) $(UBOOT_SCRIPT) $(ARCH_TARBALL) fdisk.cmd
+install: $(UBOOT_BIN) $(UBOOT_SCRIPT) $(ARCH_TARBALL) fdisk.cmd fstab
 ifeq ($(BLOCK_DEVICE),/dev/null)
 	@echo You must set BLOCK_DEVICE option
 else
@@ -73,6 +73,9 @@ else
 	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==3') $(MOUNT_POINT)/boot
 	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==4') $(MOUNT_POINT)/root
 	sudo bsdtar -xpf $(ARCH_TARBALL) -C $(MOUNT_POINT)/root
+	sudo cp fstab $(MOUNT_POINT)/root/etc/fstab
+	sudo chown 0:0 $(MOUNT_POINT)/root/etc/fstab
+	sudo chmod 644 $(MOUNT_POINT)/root/etc/fstab
 	sudo cp $(UBOOT_SCRIPT) $(MOUNT_POINT)/boot
 	sync
 	sudo umount $(MOUNT_POINT)/boot || true
