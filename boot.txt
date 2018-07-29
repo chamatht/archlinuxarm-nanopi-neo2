@@ -1,6 +1,6 @@
 part uuid ${devtype} ${devnum}:${bootpart} uuid
 
-setenv bootargs console=${console} root=PARTUUID=${uuid} rw rootwait rootfstype=f2fs
+setenv bootargs console=${console} root=/dev/mmcblk0p2 rw rootwait rootfstype=f2fs
 
 if load ${devtype} ${devnum}:${bootpart} ${kernel_addr_r} /Image; then
   setenv fdtfile allwinner/sun50i-a64-${board_name}.dtb
