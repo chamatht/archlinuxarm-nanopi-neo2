@@ -2,7 +2,7 @@
 SERIAL_DEVICE = /dev/ttyUSB0
 WGET = wget
 MINITERM = miniterm.py
-CROSS_COMPILE ?= aarch64-linux-gnu-
+CROSS_COMPILE ?= aarch64-unknown-linux-gnu-
 PYTHON ?= python2
 BLOCK_DEVICE ?= /dev/null
 FIND ?= find
