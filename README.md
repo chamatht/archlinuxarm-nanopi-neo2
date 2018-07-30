@@ -10,6 +10,8 @@ Dependencies
 - `bsdtar` (`libarchive`)
 - `python2`
 - `uboot-tools`
+- `swig`
+- `dtc`
 - `sudo`
 - `fdisk`
 - `f2fs-tools`
