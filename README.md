@@ -49,11 +49,6 @@ Installing the distribution
 Run `make install BLOCK_DEVICE=/dev/mmcblk0` with the appropriate value for
 `BLOCK_DEVICE`.
 
-This is running commands similar to [any other AllWinner ArchLinuxARM
-installation][alarm-allwinner].
-
-[alarm-allwinner]: https://archlinuxarm.org/platforms/armv7/allwinner/.
-
 
 Ethernet
 ========
