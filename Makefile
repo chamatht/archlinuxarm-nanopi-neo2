@@ -67,20 +67,19 @@ else
 	sudo mkfs.ext4 $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==3')
 	sudo mkfs.f2fs $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==4')
 	mkdir -p $(MOUNT_POINT)/root
-	mkdir -p $(MOUNT_POINT)/boot
 	sudo umount $(MOUNT_POINT)/root || true
-	sudo umount $(MOUNT_POINT)/boot || true
-	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==3') $(MOUNT_POINT)/boot
 	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==4') $(MOUNT_POINT)/root
+	sudo mkdir -p $(MOUNT_POINT)/root/boot
+	sudo umount $(MOUNT_POINT)/root/boot || true
+	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==3') $(MOUNT_POINT)/root/boot
 	sudo bsdtar -xpf $(ARCH_TARBALL) -C $(MOUNT_POINT)/root
 	sudo cp fstab $(MOUNT_POINT)/root/etc/fstab
 	sudo chown 0:0 $(MOUNT_POINT)/root/etc/fstab
 	sudo chmod 644 $(MOUNT_POINT)/root/etc/fstab
-	sudo cp $(UBOOT_SCRIPT) $(MOUNT_POINT)/boot
+	sudo cp $(UBOOT_SCRIPT) $(MOUNT_POINT)/root/boot
 	sync
-	sudo umount $(MOUNT_POINT)/boot || true
+	sudo umount $(MOUNT_POINT)/root/boot || true
 	sudo umount $(MOUNT_POINT)/root || true
-	rmdir $(MOUNT_POINT)/boot || true
 	rmdir $(MOUNT_POINT)/root || true
 	rmdir $(MOUNT_POINT) || true
 	sudo dd if=$(UBOOT_BIN) of=$(BLOCK_DEVICE) bs=1024 seek=8
