@@ -2,13 +2,13 @@
 SERIAL_DEVICE = /dev/ttyUSB0
 WGET = wget
 MINITERM = miniterm.py
-CROSS_COMPILE ?= aarch64-unknown-linux-gnu-
+CROSS_COMPILE ?= aarch64-linux-gnu-
 PYTHON ?= python2
 BLOCK_DEVICE ?= /dev/null
 FIND ?= find
 
-TRUSTED_FIRMWARE_TARBALL = allwinner.zip
-TRUSTED_FIRMWARE_DIR = arm-trusted-firmware-allwinner
+TRUSTED_FIRMWARE_TARBALL = master.zip
+TRUSTED_FIRMWARE_DIR = arm-trusted-firmware-master
 TRUSTED_FIRMWARE_BIN = bl31.bin
 
 UBOOT_SCRIPT = boot.scr
@@ -16,7 +16,7 @@ UBOOT_BIN = u-boot-sunxi-with-spl.bin
 
 ARCH_TARBALL = ArchLinuxARM-aarch64-latest.tar.gz
 
-UBOOT_VERSION = 2019.01
+UBOOT_VERSION = 2019.04
 UBOOT_TARBALL = u-boot-v$(UBOOT_VERSION).tar.gz
 UBOOT_DIR = u-boot-$(UBOOT_VERSION)
 
@@ -27,13 +27,13 @@ ALL = $(ARCH_TARBALL) $(UBOOT_BIN) $(UBOOT_SCRIPT)
 all: $(ALL)
 
 $(TRUSTED_FIRMWARE_TARBALL):
-	$(WGET)  https://github.com/apritzel/arm-trusted-firmware/archive/$@
+	$(WGET)  https://github.com/ARM-software/arm-trusted-firmware/archive/$@
 $(TRUSTED_FIRMWARE_DIR): $(TRUSTED_FIRMWARE_TARBALL)
 	unzip $<
 $(TRUSTED_FIRMWARE_BIN): $(TRUSTED_FIRMWARE_DIR)
 	cd $< && \
-		make PLAT=sun50iw1p1 DEBUG=1 bl31 CROSS_COMPILE=$(CROSS_COMPILE)
-	cp $</build/sun50iw1p1/debug/$@ .
+		make PLAT=sun50i_a64 DEBUG=1 bl31 CROSS_COMPILE=$(CROSS_COMPILE)
+	cp $</build/sun50i_a64/debug/$@ .
 
 $(UBOOT_TARBALL):
 	$(WGET) https://github.com/u-boot/u-boot/archive/v$(UBOOT_VERSION).tar.gz -O $@
