@@ -32,6 +32,8 @@ Here is a simple way to get one:
     ./ct-ng aarch64-unknown-linux-gnu
     ./ct-ng build
 
+NOTE:
+Your distro's aarch64 cross compilers might also work. (Eg: Ubuntu: gcc-aarch64-linux-gnu)
 
 Preparing the files
 ===================

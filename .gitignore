@@ -1,4 +1,6 @@
-/ArchLinuxARM-armv7-latest.tar.gz
+/ArchLinuxARM-*
 /boot.scr
 /boot.txt
 /u-boot-*
+/master.zip
+/bl31.bin
