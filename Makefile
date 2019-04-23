@@ -64,14 +64,14 @@ ifeq ($(BLOCK_DEVICE),/dev/null)
 else
 	sudo dd if=/dev/zero of=$(BLOCK_DEVICE) bs=1M count=8
 	sudo fdisk $(BLOCK_DEVICE) < fdisk.cmd
-	sudo mkfs.ext4 $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==3')
-	sudo mkfs.f2fs $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==4')
+	sudo mkfs.ext4 $(call part1,$(BLOCK_DEVICE))
+	sudo mkfs.f2fs $(shell lsblk -l -p ${BLOCK_DEVICE} -o NAME | awk 'NR==4')
 	mkdir -p $(MOUNT_POINT)/root
 	sudo umount $(MOUNT_POINT)/root || true
-	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==4') $(MOUNT_POINT)/root
+	sudo mount $(shell lsblk -l -p ${BLOCK_DEVICE} -o NAME | awk 'NR==4') $(MOUNT_POINT)/root
 	sudo mkdir -p $(MOUNT_POINT)/root/boot
 	sudo umount $(MOUNT_POINT)/root/boot || true
-	sudo mount $(lsblk -l -p $(BLOCK_DEVICE) -o NAME | awk 'NR==3') $(MOUNT_POINT)/root/boot
+	sudo mount $(call part1,$(BLOCK_DEVICE)) $(MOUNT_POINT)/root/boot
 	sudo bsdtar -xpf $(ARCH_TARBALL) -C $(MOUNT_POINT)/root
 	sudo cp fstab $(MOUNT_POINT)/root/etc/fstab
 	sudo chown 0:0 $(MOUNT_POINT)/root/etc/fstab
